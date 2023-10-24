@@ -1,0 +1,12 @@
+#!/bin/sh
+
+IS_CONNECTED=$(snapctl is-connected etc-script-exporter; echo $?)
+
+if [ "${IS_CONNECTED}" = "0" -a -r /etc/script-exporter.yaml ]
+then
+  echo "Launched with config from the host filesystem" | systemd-cat
+  exec "${SNAP}/script_exporter" -config.file "/etc/script-exporter.yaml"
+else
+  echo "Launched with minimal default config from the snap" | systemd-cat
+  exec "${SNAP}/script_exporter" -config.file "$SNAP_DATA/etc/script-exporter.yaml"
+fi

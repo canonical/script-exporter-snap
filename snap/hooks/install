@@ -1,0 +1,17 @@
+#!/bin/sh -e
+
+mkdir -p $SNAP_DATA/etc/
+
+if [ ! -f $SNAP_DATA/etc/script-exporter.yaml ]
+then
+  cat <<EOF > $SNAP_DATA/etc/script-exporter.yaml
+tls:
+  enabled: false
+
+basicAuth:
+  enabled: false
+
+bearerAuth:
+  enabled: false
+EOF
+fi

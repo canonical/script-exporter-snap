@@ -1,0 +1,79 @@
+name: script-exporter
+version: '2.15.1'
+summary: Prometheus exporter to execute scripts
+license: Apache-2.0
+contact: luca.bello@canonical.com
+issues: https://github.com/canonical/script-exporter-snap/issues
+source-code: https://github.com/canonical/script-exporter-snap
+website: https://github.com/ricoberger/script_exporter
+description: "Script exporter allows to execute scripts and collect metrics through Prometheus from the output or the exit status."
+base: core22
+grade: stable
+confinement: strict
+compression: lzo
+plugs:
+  etc-script-exporter:
+    interface: system-files
+    read:
+      - /etc/script-exporter.yaml
+  proc-sys-kernel-random:
+    interface: system-files
+    read:
+      - /proc/sys/kernel/random/write_wakeup_threshold
+      - /proc/sys/kernel/random/read_wakeup_threshold
+      - /proc/sys/kernel/random/poolsize
+      - /proc/sys/kernel/random/urandom_min_reseed_secs
+apps:
+  script-exporter:
+    daemon: simple
+    command: script-exporter-wrapper
+    install-mode: disable
+    restart-condition: on-failure
+    plugs:
+      - network-bind
+      - time-control
+      - hardware-observe
+      - mount-observe
+      - network-observe
+      - system-observe
+      - log-observe
+      - etc-script-exporter
+      - proc-sys-kernel-random
+architectures:
+  - build-on: amd64
+parts:
+  wrapper:
+    plugin: dump
+    source: ./snap/local
+    source-type: local
+    override-build: |
+      cp script-exporter-wrapper $CRAFT_PART_INSTALL/
+  script-exporter:
+    plugin: go
+    source: https://github.com/ricoberger/script_exporter
+    source-type: git
+    source-tag: "v2.15.1"
+    build-snaps:
+      - go
+    build-environment:
+      - CGO_ENABLED: 0
+    override-build: |
+      make build
+      cp bin/script_exporter $CRAFT_PART_INSTALL/script_exporter
+# grafana-agent:
+#   build-packages:
+#     - build-essential
+#     - libsystemd-dev
+#     - libbpfcc-dev
+#     - bpfcc-tools
+#   stage-packages:
+#     - libsystemd0
+#     - libbpfcc
+#     - bpfcc-tools
+#   build-environment:
+#     - USE_CONTAINER: 0
+#     - GOFLAGS: "-mod=readonly"
+#   override-build: |
+#     make agent agentctl
+#     cp build/grafana-agent $CRAFT_PART_INSTALL/agent
+#     cp build/grafana-agentctl $CRAFT_PART_INSTALL/agentctl
