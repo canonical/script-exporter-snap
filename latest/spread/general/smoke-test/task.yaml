@@ -14,7 +14,7 @@ execute: |
   COUNT=0
 
   while [ "$COUNT" -lt "$MAX_RETRIES" ]; do
-    if curl -sf "${ENDPOINT}" | grep -q "script_exporter_build_info"; then
+    if curl -sf "${ENDPOINT}" | grep -q "scripts_build_info"; then
       echo "Script exporter is serving metrics!"
       exit 0
     fi
