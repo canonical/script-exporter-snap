@@ -7,10 +7,12 @@ issues: https://github.com/canonical/script-exporter-snap/issues
 source-code: https://github.com/canonical/script-exporter-snap
 website: https://github.com/ricoberger/script_exporter
 description: "Script exporter allows to execute scripts and collect metrics through Prometheus from the output or the exit status."
-base: core22
+base: core24
 grade: stable
 confinement: strict
 compression: lzo
+platforms:
+  amd64:
 plugs:
   etc-script-exporter:
     interface: system-files
@@ -26,7 +28,7 @@ plugs:
 apps:
   script-exporter:
     daemon: simple
-    command: script-exporter-wrapper
+    command: command-wrapper
     install-mode: disable
     restart-condition: on-failure
     plugs:
@@ -39,15 +41,13 @@ apps:
       - log-observe
       - etc-script-exporter
       - proc-sys-kernel-random
-architectures:
-  - build-on: amd64
 parts:
   wrapper:
     plugin: dump
     source: ./snap/local
     source-type: local
     override-build: |
-      cp script-exporter-wrapper $CRAFT_PART_INSTALL/
+      cp command-wrapper $CRAFT_PART_INSTALL/
   script-exporter:
     plugin: go
     source: https://github.com/ricoberger/script_exporter
@@ -60,20 +60,3 @@ parts:
     override-build: |
       make build
       cp bin/script_exporter $CRAFT_PART_INSTALL/script_exporter
-# grafana-agent:
-#   build-packages:
-#     - build-essential
-#     - libsystemd-dev
-#     - libbpfcc-dev
-#     - bpfcc-tools
-#   stage-packages:
-#     - libsystemd0
-#     - libbpfcc
-#     - bpfcc-tools
-#   build-environment:
-#     - USE_CONTAINER: 0
-#     - GOFLAGS: "-mod=readonly"
-#   override-build: |
-#     make agent agentctl
-#     cp build/grafana-agent $CRAFT_PART_INSTALL/agent
-#     cp build/grafana-agentctl $CRAFT_PART_INSTALL/agentctl

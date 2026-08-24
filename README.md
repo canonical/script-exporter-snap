@@ -1,46 +1,80 @@
-# script-exporter snap
+# Script Exporter Snap
 
-**This is the snap for Script Exporter**, a *Prometheus exporter to execute scripts and collect metrics from the output or the exit status*.
+[![Pull Request](https://github.com/canonical/script-exporter-snap/actions/workflows/pull-request.yaml/badge.svg)](https://github.com/canonical/script-exporter-snap/actions/workflows/pull-request.yaml)
+[![Release Snap](https://github.com/canonical/script-exporter-snap/actions/workflows/release.yaml/badge.svg)](https://github.com/canonical/script-exporter-snap/actions/workflows/release.yaml)
 
-<!-- Uncomment and modify this when you are provided a build status badge
-<p align="center">
-<a href="https://snapcraft.io/prometheus-script-exporter">
-  <img alt="enpass" src="https://snapcraft.io/grafana-agent/badge.svg" />
-</a>
-<a href="https://snapcraft.io/prometheus-script-exporter">
-  <img alt="enpass" src="https://snapcraft.io/grafana-agent/trending.svg?name=0" />
-</a>
-</p>
--->
+A snap package for [Script Exporter](https://github.com/ricoberger/script_exporter).
 
-## Install
+## Overview
 
-```
-sudo snap install prometheus-script-exporter
+Script exporter allows to execute scripts and collect metrics through Prometheus from the output or the exit status.
+
+## Installation
+
+```bash
+sudo snap install script-exporter
 ```
 
-<!-- Uncomment and modify this when your snap is available on the store
-[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-white.svg)](https://snapcraft.io/prometheus-script-exporter)
--->
+## Usage
 
-([Don't have snapd installed?](https://snapcraft.io/docs/core/install))
+### Running as a Service (Daemon)
+
+The snap includes a daemon service that is disabled by default. To enable and start it:
+
+```bash
+sudo snap start --enable script-exporter
+```
+
+To stop the service:
+
+```bash
+sudo snap stop script-exporter
+```
 
 ## Configuration
 
-Once installed, a default configuration file will be created at `/etc/script-exporter.yaml`. Before starting the exporter, make sure to update this configuration file to suit your needs, consulting the [official documentation](https://github.com/ricoberger/script_exporter#usage-and-configuration). 
+Once installed, a default configuration file will be created at `$SNAP_DATA/etc/script-exporter.yaml`. Before starting the exporter, make sure to update the configuration to suit your needs, consulting the [official documentation](https://github.com/ricoberger/script_exporter#usage-and-configuration).
 
-<!--
-## The Snapcrafters
+To use an external configuration file from the host filesystem instead:
 
-| [![Your Name](https://gravatar.com/avatar/bc0bced65e963eb5c3a16cab8b004431/?s=128)](https://github.com/yourname/) |
-| :---: |
-| [Your Name](https://github.com/yourname/) |
---> 
+```bash
+# Connect the system-files plug
+sudo snap connect script-exporter:etc-script-exporter
 
-<!-- Uncomment and modify this when you have upstream contacts
-## Upstream
+# Create and configure the file
+sudo nano /etc/script-exporter.yaml
 
-| [![Upstream Name](https://gravatar.com/avatar/bc0bced65e963eb5c3a16cab8b004431?s=128)](https://github.com/upstreamname) |
-| :---: |
-| [Upstream Name](https://github.com/upstreamname) |
--->
+# Restart the service
+sudo snap restart script-exporter
+```
+
+## Development
+
+This snap follows the [Canonical Observability snaps blueprint](https://github.com/canonical/observability/tree/main/blueprints/snaps).
+
+### Prerequisites
+
+- `snapcraft`
+- `just`
+- `yq`
+- `gh` (GitHub CLI)
+
+### Common Commands
+
+```bash
+# Build the snap locally
+just pack
+
+# Run tests
+just test
+
+# Update to latest upstream version
+just update ricoberger/script_exporter
+
+# Fetch latest centralized files from canonical/observability
+just refresh
+```
+
+## License
+
+Apache License 2.0
