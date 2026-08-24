@@ -2,6 +2,8 @@ set allow-duplicate-recipes
 set allow-duplicate-variables
 import? 'snaps.just'
 
+snap_name := "prometheus-script-exporter"
+
 [private]
 @default:
   just --list
