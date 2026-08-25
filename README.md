@@ -22,7 +22,7 @@ sudo snap install script-exporter
 The snap includes a daemon service that is disabled by default. To enable and start it:
 
 ```bash
-sudo snap start --enable script-exporter
+sudo snap start --enable prometheus-script-exporter
 ```
 
 To stop the service:

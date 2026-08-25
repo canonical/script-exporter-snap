@@ -1,4 +1,4 @@
-name: script-exporter
+name: prometheus-script-exporter
 version: '2.15.1'
 summary: Prometheus exporter to execute scripts
 license: Apache-2.0

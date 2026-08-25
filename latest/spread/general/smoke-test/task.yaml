@@ -1,7 +1,7 @@
 summary: Verify the Script Exporter snap starts and serves metrics
 
 environment:
-  SNAP_NAME: script-exporter
+  SNAP_NAME: prometheus-script-exporter
   ENDPOINT: "http://localhost:9469/metrics"
   MAX_RETRIES: "12"
   INTERVAL: "5"
