@@ -13,6 +13,9 @@ confinement: strict
 compression: lzo
 platforms:
   amd64:
+  arm64:
+  ppc64el:
+  s390x:
 plugs:
   etc-script-exporter:
     interface: system-files
