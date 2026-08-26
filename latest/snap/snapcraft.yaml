@@ -21,13 +21,6 @@ plugs:
     interface: system-files
     read:
       - /etc/script-exporter.yaml
-  proc-sys-kernel-random:
-    interface: system-files
-    read:
-      - /proc/sys/kernel/random/write_wakeup_threshold
-      - /proc/sys/kernel/random/read_wakeup_threshold
-      - /proc/sys/kernel/random/poolsize
-      - /proc/sys/kernel/random/urandom_min_reseed_secs
 apps:
   script-exporter:
     daemon: simple
@@ -43,7 +36,6 @@ apps:
       - system-observe
       - log-observe
       - etc-script-exporter
-      - proc-sys-kernel-random
 parts:
   wrapper:
     plugin: dump
